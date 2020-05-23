@@ -1,0 +1,4 @@
+D:\Projects\bnz-webapp-manager\server\obj\Debug\netcoreapp2.2\WebAppManager.csprojAssemblyReference.cache
+D:\Projects\bnz-webapp-manager\server\obj\Debug\netcoreapp2.2\WebAppManager.csproj.CoreCompileInputs.cache
+D:\Projects\bnz-webapp-manager\server\obj\Debug\netcoreapp2.2\WebAppManager.AssemblyInfoInputs.cache
+D:\Projects\bnz-webapp-manager\server\obj\Debug\netcoreapp2.2\WebAppManager.AssemblyInfo.cs

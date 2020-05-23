@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebAppManager</name>
+    </assembly>
+    <members>
+        <member name="T:WebAppManager.Controllers.ApplicationPoolController">
+            <summary> API для роботи з пулами застосунків </summary>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.#ctor(WebAppManager.WebAppManager)">
+            <summary> Create instance of <see cref="T:WebAppManager.Controllers.ApplicationPoolController"/> </summary>
+            <param name="webAppManager">менеджер</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.GetApplicationPoolData(Microsoft.Web.Administration.ApplicationPool)">
+            <summary> Отримати дані про пул застосунків </summary>
+            <param name="applicationPool">пул застосунків</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.GetWorkerProcessData(Microsoft.Web.Administration.WorkerProcess)">
+            <summary> Отримати дані про процес </summary>
+            <param name="workerProcess">процес</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.GetProcessRamCpuUsage(System.Int32)">
+            <summary> Отримати дані про використання ОЗУ та ЦПУ </summary>
+            <param name="processId">id процеса</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.GetApplicationPools">
+            <summary> Отримати дані про пул застосунків </summary>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.Start(System.String)">
+            <summary> Запустити пул застосунків </summary>
+            <param name="name">назва</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.Stop(System.String)">
+            <summary> Зупинити пул застосунків </summary>
+            <param name="name">назва</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.ApplicationPoolController.Recycle(System.String)">
+            <summary> Перезапустити пул застосунків </summary>
+            <param name="name">назва</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.DBController.ExecuteSQL(System.String,System.String)">
+            <summary> Виконати SQL </summary>
+            <param name="connectionString">рядок підключення до БД</param>
+            <param name="sql">запит</param>
+            <returns>результат виконання</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.DBController.GetDbConnection(System.String)">
+            <summary> Отримати підключення до БД </summary>
+            <param name="connectionString">рядок підключення до БД</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.DBController.GetDBConnectionType(System.String)">
+            <summary> Отримати тип БД </summary>
+            <param name="connectionString">рядок підключення до БД</param>
+            <returns>тип БД</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.DBController.ExecuteSQL(System.Data.IDbConnection,System.String)">
+            <summary> Виконати SQL </summary>
+            <param name="dbConnection">підключення до БД</param>
+            <param name="sql">запит</param>
+            <returns>результат виконання</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.DBController.ReadToResult(System.Data.IDataReader,WebAppManager.Model.SQLQueryResult@)">
+            <summary> Вичитати дані в результат виконання запиту </summary>
+            <param name="reader">читач результатів виконання запиту</param>
+            <param name="result">результат виконання запиту</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.DBController.ConvertDataRowToList(System.Data.DataRow)">
+            <summary> Конвертувати рядок в список рядків </summary>
+            <param name="row">рядок</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.DBController.Execute(System.String,WebAppManager.Model.SQLExecuteConfig)">
+            <summary> Виконати запит SQL до бази застосунку </summary>
+            <param name="webAppId">id застосунку</param>
+            <param name="config">параметри виконання</param>
+            <returns>результат</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.RedisController.CreateRedisClient(System.String)">
+            <summary> Створити клієнт Redis </summary>
+            <param name="connectionString">рядок підключення</param>
+            <returns>клієнт для роботи з базою redis</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.RedisController.GetWebAppRedisClient(System.String)">
+            <summary> Отримати клієнт для підключення до бази redis застосунку </summary>
+            <param name="id">id застосунку</param>
+            <returns>клієнт</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.RedisController.GetConnectionStringParameter``1(System.Data.Common.DbConnectionStringBuilder,System.String,``0)">
+            <summary> Отримати параметр з рядка підключення до Redis </summary>
+            <typeparam name="T">тип параметру</typeparam>
+            <param name="connectionString">рядок підключення</param>
+            <param name="key">ключ параметра</param>
+            <param name="defaultValue">значення по замовчуванню (якщо не вдалось знайти в рядку)</param>
+            <returns>значення параметра</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.RedisController.GetAll(System.String)">
+            <summary> Отримати всі дані з БД </summary>
+            <param name="webAppId">id застосунку</param>
+            <returns>перелік всіх значень в БД</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.RedisController.GetByKey(System.String,System.String)">
+            <summary> Отримати значення за ключем </summary>
+            <param name="webAppId">id застосунку</param>
+            <param name="key">ключ</param>
+            <returns>значення</returns>
+        </member>
+        <member name="M:WebAppManager.Controllers.RedisController.Set(System.String,System.String,System.String)">
+            <summary> Встановити значення </summary>
+            <param name="webAppId">id застосунку</param>
+            <param name="key">ключ</param>
+            <param name="value">значення</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.RedisController.FlushDb(System.String)">
+            <summary> Очистити базу redis </summary>
+            <param name="webAppId">id застосунку</param>
+        </member>
+        <member name="M:WebAppManager.Controllers.WebAppController.Get(System.Boolean)">
+            <see cref="M:WebAppManager.WebAppManager.GetWebApps(System.Boolean)" />
+        </member>
+        <member name="T:WebAppManager.Model.ApplicationPoolData">
+            <summary> Дані про пул застосунків </summary>
+        </member>
+        <member name="P:WebAppManager.Model.ApplicationPoolData.Name">
+            <summary> Назва </summary>
+        </member>
+        <member name="P:WebAppManager.Model.ApplicationPoolData.State">
+            <summary> Стан </summary>
+        </member>
+        <member name="P:WebAppManager.Model.ApplicationPoolData.WorkerProcesses">
+            <summary> Запущені процеси </summary>
+        </member>
+        <member name="T:WebAppManager.Model.SQLExecuteConfig">
+            <summary> Параметри для виконання запиту SQL </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLExecuteConfig.Sql">
+            <summary> код запиту </summary>
+        </member>
+        <member name="T:WebAppManager.Model.SQLQueryResult">
+            <summary> Результат виконання SQL запиту </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.Success">
+            <summary> Успішність виконання </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.ExecuteTime">
+            <summary> Час виконання запиту (в мс) </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.ErrorMessage">
+            <summary> Текст помилки </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.ErrorStack">
+            <summary> Стек помилки </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.Sql">
+            <summary> Запит </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.Columns">
+            <summary> Колонки </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.Rows">
+            <summary> Рядки з даними </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.RecordsAffected">
+            <summary> Кількість зачеплених записів </summary>
+        </member>
+        <member name="P:WebAppManager.Model.SQLQueryResult.DBType">
+            <summary> Тип бази даних </summary>
+        </member>
+        <member name="T:WebAppManager.Model.WebApp">
+            <summary> Дані про застосунок розгорнутий в IIS </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WebApp.Id">
+            <summary> Ідентифікатор сайту (генерується автоматично) </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WebApp.Site">
+            <summary> Сайт на якому розташований застосунок </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WebApp.Path">
+            <summary> URL застосунку </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WebApp.PhysicalPath">
+            <summary> Шлях до розташування застосунку на диску </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WebApp.ApplicationPoolName">
+            <summary> Назва пулу застосунків </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WebApp.DBConnectionString">
+            <summary> Рядок підключення до БД </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WebApp.RedisConnectionString">
+            <summary> Рядок підключення до Redis </summary>
+        </member>
+        <member name="T:WebAppManager.Model.WorkerProcessData">
+            <summary> Дані про процеси IIS </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WorkerProcessData.ProcessId">
+            <summary> Id </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WorkerProcessData.State">
+            <summary> Стан </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WorkerProcessData.RAM">
+            <summary> Використана оперативна пам'ять, KB </summary>
+        </member>
+        <member name="P:WebAppManager.Model.WorkerProcessData.CPU">
+            <summary> % процесорного часу </summary>
+        </member>
+        <member name="F:WebAppManager.WebAppManager.CacheKey">
+            <summary> Ключ для зберігання даних в кеші </summary>
+        </member>
+        <member name="F:WebAppManager.WebAppManager.LockObj">
+            <summary> Об'єкт для  </summary>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.GetCacheStorageTime">
+            <summary> Отримати час зберігання даних про застосунки в кеші </summary>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.CacheWebAppsFactory(Microsoft.Extensions.Caching.Memory.ICacheEntry)">
+            <summary> Фабрика для створення запису в кеші з даними про застосунки </summary>
+            <param name="cacheEntry">запис в кеші</param>
+            <returns>дані про застосунки</returns>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.GetWebAppsFromIIS">
+            <summary> Отримати дані про застосунки з IIS </summary>
+            <returns>перелік застосунків Creatio/Bpmonline розгорнутих в IIS</returns>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.IsCreatioWebApp(WebAppManager.Model.WebApp)">
+            <summary> Перевірити що застосунок є застосунком Creatio (зовнішній застосунок) </summary>
+            <param name="webApp">застосунок</param>
+            <returns><see langword="true"/>застосунок Creatio</returns>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.GetSiteWebApps(Microsoft.Web.Administration.Site)">
+            <summary> Отримати перелік застосунків розгорнутих на сайті </summary>
+            <param name="site">сайт</param>
+            <returns>застосунки на сайті</returns>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.ConvertToWebApp(Microsoft.Web.Administration.Application,Microsoft.Web.Administration.Site)">
+            <summary> Конвертувати дані про застосунок </summary>
+            <param name="application">застосунок IIS</param>
+            <param name="site">сайт IIS</param>
+            <returns>дані про застосунок для подальшої роботи з ними</returns>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.GetWebAppHash(WebAppManager.Model.WebApp)">
+            <summary> Отримати hash даних про застосунок. Використовується для створення ідентифікатора </summary>
+            <param name="webApp">застосунок</param>
+            <returns>унікальний ідентифікатор сайту</returns>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.LoadConnectionStringsInfo(WebAppManager.Model.WebApp@)">
+            <summary> Завантажити дані про рядки підключення до БД та Redis </summary>
+            <param name="webApp">дані про застосунок</param>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.GetById(System.String)">
+            <summary> Отримати дані про застосунок по Id </summary>
+            <param name="id">id</param>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.GetWebApps(System.Boolean)">
+            <summary> Отримати дані про застосунки.
+            Використовується кеш для того щоб не читати дані ConnectionString кожен раз
+            </summary>
+            <param name="updateInCache">оновити дані в кеші. Якщо false - значення буде оновлене в кеші </param>
+        </member>
+    </members>
+</doc>
