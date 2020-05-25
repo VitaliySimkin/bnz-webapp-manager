@@ -1,4 +1,4 @@
-последний релиз - https://github.com/VitaliySimkin/bnz-webapp-manager/releases/tag/v1.1.0
+![alt text](https://github.com/VitaliySimkin/bnz-webapp-manager/blob/master/screen.png?raw=true)
 
 ## установка
 - скачайте и установите Hosting Bundle из https://dotnet.microsoft.com/download/dotnet-core/3.1
