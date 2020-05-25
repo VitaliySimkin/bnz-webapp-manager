@@ -4,7 +4,6 @@ import { WebApp, ApplicationPoolData } from "../../../api-client/index";
 
 Vue.use(Vuex);
 
-
 const AutoRefreshTimeList = [
 	{ value: -1, label: "OFF" },
 	{ value: 2, label: "2 сек" },
@@ -23,9 +22,11 @@ class State {
 	public AutoRefreshTimeList = AutoRefreshTimeList;
 	public dataLoading: boolean = false;
 	public HelpVisible: boolean = false;
+	public VERSION: string = "1.1.0";
+	public CONFIG: object = {};
 }
 
-export default new Vuex.Store({
+const STORE = new Vuex.Store({
 	state: new State(),
 	mutations: {
 		setFilterText(state, value) {
@@ -49,9 +50,21 @@ export default new Vuex.Store({
 		setDataLoading(state, value) {
 			state.dataLoading = Boolean(value);
 		},
+		setConfig(state, config) {
+			state.CONFIG = config;
+		},
 	},
 	actions: {
 	},
 	modules: {
 	},
 });
+
+
+(async function loadConfig() {
+	const data = await fetch("../config.json");
+	const config = await data.json();
+	STORE.commit("setConfig", config);
+})();
+
+export default STORE;

@@ -1,11 +1,36 @@
 <template><div id="app">
 
-	<el-dialog title="Довідка" :visible.sync="HelpVisible" width="80%">
-		<div class="help-cnt" style="height: 50vh;overflow:auto;">
+	<el-dialog  :visible.sync="HelpVisible" top="10vh" width="950px" custom-class="help-dialog">
+		<template v-slot:title>
+			<div class="help-header-cnt">
+				<div class="help-application-info">
+					<span class="logo-icon"></span>
+					<span class="logo-version">v{{VERSION}}</span>
+					<a href="https://github.com/VitaliySimkin/bnz-webapp-manager" target="_blank" class="logo-github"></a>
+				</div>
+			</div>
+		</template>
+		<div class="help-content-cnt">
+			<span>Панель призначена для відображення сайтів Creatio розгорнутих на сервері, доступом до БД, redis, отримання інформації про стан пулу застосунків та керування ним</span>
+			<span><b>Пошук</b> - пошук за входженням в назву сайту</span>
+			<span><b>ACTIVE</b> - відображення тільки тих додатків для яких є запущені процеси</span>
+			<span><b>Кнопка "Оновити" та час автоматичного оновлення</b> - дозволяють оновити дані про стан пулу застосунків. Буде оновлена інформація про стан пулу застосунків та запущені ним процеси</span>
+			<span>Дані про пули застосунків та процеси надається за запитом на сервер. Перелік розгорнутих сайтів кешується та оновлюється кожні 5 хвилин на сервері</span>
 			<img src="./assets/screen/common.png" />
+			<span>Відображається стан пулу застосунків та використана ним ОЗУ. Якщо в пула застосунків є запущені процеси то він буде більш виділений, а при наведені на нього мишкою буде відображений список повязаних процесів </span>
+			<span>Дані по CPU поки що не відображають коректну інформацію</span>
 			<img src="./assets/screen/apppool.png" />
+			<span>Консоль SQL. Пітримує <b>Oracle</b> та <b>MSSQL</b></span>
 			<img src="./assets/screen/sql.png" />
+			<span><b>Get all values</b> - Отримати всі значення з БД Redis</span>
+			<span><b>Get</b> - Отримати значення по ключу</span>
+			<span><b>Set</b> - Встановити значення в БД</span>
+			<span>При кліку по запису в таблиці ключ та значення автоматично проставляються в поля вводу</span>
 			<img src="./assets/screen/redis.png" />
+			<span><b>physicalPath</b> - шлях до застосунку на диску </span>
+			<span><b>applicationPoolName</b> - назва пулу застосунків </span>
+			<span><b>dbConnectionString</b> - рядок підключення до БД </span>
+			<span><b>redisConnectionString</b> - рядок підключення до Redis </span>
 			<img src="./assets/screen/details.png" />
 			<img src="./assets/screen/actions.png" />
 		</div>
@@ -65,6 +90,9 @@ export default class App extends Vue {
 
 	@State("autoRefreshTime")
 	private autoRefreshTime: number;
+
+	@State("VERSION")
+	private VERSION: string;
 
 	private autoRefreshIntervalId: number | null = null;
 
@@ -149,6 +177,66 @@ body, html {
 	overflow:auto;
 	img {
 		border: solid 1px #aaa;
+	}
+}
+
+.help-application-info {
+	user-select: none;
+	margin: 4px 10px;
+}
+
+.logo-icon {
+    background-image: url(./assets/logo.png);
+    background-size: contain;
+    display: inline-block;
+    height: 25px;
+    width: 25px;
+}
+
+.logo-github {
+    background-image: url(./assets/github.png);
+    height: 23px;
+    display: inline-block;
+    width: 65px;
+    background-size: 117%;
+    background-position-y: -2px;
+    background-position-x: -7px;
+    margin-left: 20px;
+    vertical-align: top;
+}
+
+.logo-version {
+	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-weight: bold;
+    font-size: 15px;
+    display: inline-block;
+    color: #555;
+    height: 100%;
+    padding-left: 5px;
+    vertical-align: super;
+}
+
+.help-dialog {
+	.el-dialog__body {
+		padding: 0;
+	}
+}
+
+.help-content-cnt {
+	height: 70vh;
+	overflow:auto;
+	padding: 5px 20px;
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 17px;
+	font-weight: 400;
+	word-break: break-word;
+	span {
+		display: block;
+	}
+	img {
+		border: solid 1px #aaa;
+		width: 98%;
+		margin: 5px 0;
 	}
 }
 

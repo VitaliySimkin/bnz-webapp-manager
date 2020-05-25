@@ -21,3 +21,4 @@ D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.csproj.CoreCompi
 D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.MvcApplicationPartsAssemblyInfo.cs
 D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.MvcApplicationPartsAssemblyInfo.cache
 D:\Projects\bnz-webapp-manager\release\server\WebAppManager.xml
+D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.csprojAssemblyReference.cache
