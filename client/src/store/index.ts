@@ -1,15 +1,57 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+import Vue from "vue";
+import Vuex from "vuex";
+import { WebApp, ApplicationPoolData } from "../../../api-client/index";
 
 Vue.use(Vuex);
 
+
+const AutoRefreshTimeList = [
+	{ value: -1, label: "OFF" },
+	{ value: 2, label: "2 сек" },
+	{ value: 5, label: "5 сек" },
+	{ value: 10, label: "10 сек" },
+	{ value: 30, label: "30 сек" },
+	{ value: 60, label: "1 хв" },
+];
+
+class State {
+	public filterText: string = "";
+	public filterOnlyActive: boolean = false;
+	public applications: WebApp[] = [];
+	public appPools: ApplicationPoolData[] = [];
+	public autoRefreshTime: number = -1;
+	public AutoRefreshTimeList = AutoRefreshTimeList;
+	public dataLoading: boolean = false;
+	public HelpVisible: boolean = false;
+}
+
 export default new Vuex.Store({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  },
+	state: new State(),
+	mutations: {
+		setFilterText(state, value) {
+			state.filterText = value;
+		},
+		setFilterOnlyActive(state, value) {
+			state.filterOnlyActive = value;
+		},
+		setApplications(state, apps: WebApp[]) {
+			state.applications = apps;
+		},
+		setHelpVisible(state, value) {
+			state.HelpVisible = value;
+		},
+		setPools(state, pools: ApplicationPoolData[]) {
+			state.appPools = pools;
+		},
+		setAutoRefreshTime(state, value) {
+			state.autoRefreshTime = value || -1;
+		},
+		setDataLoading(state, value) {
+			state.dataLoading = Boolean(value);
+		},
+	},
+	actions: {
+	},
+	modules: {
+	},
 });

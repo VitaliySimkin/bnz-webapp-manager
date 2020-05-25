@@ -17,7 +17,7 @@ D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.dll
 D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.pdb
 D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.genruntimeconfig.cache
 D:\Projects\bnz-webapp-manager\release\server\web.config
-D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.csprojAssemblyReference.cache
 D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.csproj.CoreCompileInputs.cache
 D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.MvcApplicationPartsAssemblyInfo.cs
 D:\Projects\bnz-webapp-manager\server\obj\Release\WebAppManager.MvcApplicationPartsAssemblyInfo.cache
+D:\Projects\bnz-webapp-manager\release\server\WebAppManager.xml

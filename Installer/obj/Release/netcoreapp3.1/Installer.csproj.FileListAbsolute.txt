@@ -1,0 +1,17 @@
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\Installer.exe
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.csprojAssemblyReference.cache
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.AssemblyInfoInputs.cache
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.AssemblyInfo.cs
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\Installer.deps.json
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\Installer.runtimeconfig.json
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\Installer.runtimeconfig.dev.json
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\Installer.dll
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\Installer.pdb
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\Microsoft.Web.Administration.dll
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\runtimes\unix\lib\netstandard1.5\System.ServiceProcess.ServiceController.dll
+D:\Projects\bnz-webapp-manager\Installer\bin\Release\netcoreapp3.1\runtimes\win\lib\netstandard1.5\System.ServiceProcess.ServiceController.dll
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.csproj.CoreCompileInputs.cache
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.csproj.CopyComplete
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.dll
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.pdb
+D:\Projects\bnz-webapp-manager\Installer\obj\Release\netcoreapp3.1\Installer.genruntimeconfig.cache

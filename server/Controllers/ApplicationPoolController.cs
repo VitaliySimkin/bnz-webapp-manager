@@ -46,11 +46,12 @@ namespace WebAppManager.Controllers {
 		/// <param name="processId">id процеса</param>
 		protected (double ram, double cpu) GetProcessRamCpuUsage(int processId) {
 			Process p = Process.GetProcessById(processId);
-			double ram, cpu;
-			using (var perf = new PerformanceCounter("Process", "Working Set", p.ProcessName)) ram = perf.NextValue();
-			using (var perf = new PerformanceCounter("Process", "% Processor Time", p.ProcessName)) cpu = perf.NextValue();
-			return (ram / 1024, cpu);
+			double ram = p.WorkingSet64 / 1024.0;
+			double cpu = 0;
+			//using (var perf = new PerformanceCounter("Process", "% Processor Time", p.ProcessName)) cpu = perf.NextValue();
+			return (ram, cpu);
 		}
+
 
 		#endregion
 

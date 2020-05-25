@@ -7,7 +7,6 @@ D:\Projects\bnz-webapp-manager\release\server\netcoreapp3.1\WebAppManager.runtim
 D:\Projects\bnz-webapp-manager\release\server\netcoreapp3.1\WebAppManager.runtimeconfig.dev.json
 D:\Projects\bnz-webapp-manager\release\server\netcoreapp3.1\WebAppManager.dll
 D:\Projects\bnz-webapp-manager\release\server\netcoreapp3.1\WebAppManager.pdb
-D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.csprojAssemblyReference.cache
 D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.AssemblyInfoInputs.cache
 D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.AssemblyInfo.cs
 D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.RazorTargetAssemblyInfo.cache
@@ -22,3 +21,4 @@ D:\Projects\bnz-webapp-manager\release\server\netcoreapp3.1\WebAppManager.xml
 D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.csproj.CoreCompileInputs.cache
 D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.MvcApplicationPartsAssemblyInfo.cs
 D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.MvcApplicationPartsAssemblyInfo.cache
+D:\Projects\bnz-webapp-manager\server\obj\Release\netcoreapp3.1\WebAppManager.csprojAssemblyReference.cache

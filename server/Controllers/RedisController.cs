@@ -5,12 +5,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ServiceStack;
 using ServiceStack.Redis;
 using WebAppManager.Model;
 
 namespace WebAppManager.Controllers {
 
-	[Route("redis")]
+	[Microsoft.AspNetCore.Components.Route("redis")]
 	[Produces("application/json")]
 	[ApiController]
 	public class RedisController : BaseController {
@@ -67,6 +68,10 @@ namespace WebAppManager.Controllers {
 		[HttpGet("{webAppId}", Name = nameof(GetAll))]
 		public KeyValuePair<string, string>[] GetAll(string webAppId) {
 			using IRedisClient client = GetWebAppRedisClient(webAppId);
+			var keys = client.GetAllKeys();
+			if (keys == null || keys.IsEmpty()) {
+				return new KeyValuePair<string, string>[0];
+			}
 			return client.GetAll<string>(client.GetAllKeys()).ToArray();
 		}
 

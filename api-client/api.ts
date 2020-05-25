@@ -16,7 +16,7 @@ import * as url from "url";
 import * as portableFetch from "portable-fetch";
 import { Configuration } from "./configuration";
 
-const BASE_PATH = "/".replace(/\/+$/, "");
+const BASE_PATH = "http://v-simkin-pc.tscrm.com/server/".replace(/\/+$/, "");
 
 /**
  *
@@ -54,7 +54,7 @@ export interface FetchArgs {
  * @class BaseAPI
  */
 export class BaseAPI {
-    protected configuration: Configuration;
+    protected configuration?: Configuration;
 
     constructor(configuration?: Configuration, protected basePath: string = BASE_PATH, protected fetch: FetchAPI = portableFetch) {
         if (configuration) {
@@ -70,8 +70,7 @@ export class BaseAPI {
  * @class RequiredError
  * @extends {Error}
  */
-export class RequiredError extends Error {
-    name: "RequiredError"
+class RequiredError extends Error {
     constructor(public field: string, msg?: string) {
         super(msg);
     }
