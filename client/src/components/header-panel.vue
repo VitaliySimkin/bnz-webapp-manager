@@ -3,10 +3,11 @@
 		<el-input v-model="filterText" class="filter-text-input" clearable placeholder="пошук..." style="width:30vw;"></el-input>
 		<el-button @click="filterOnlyActive = !filterOnlyActive" :type="filterOnlyActive ? 'success' : ''"
 			style="margin-left: 10px;">ACTIVE</el-button>
+		<el-input v-model="apiAddress" class="filter-text-input" style="width:30vw;"></el-input>
 	</div>
 	<div>
 		<el-button type="info" plain @click="HelpVisible = true"><i class="el-icon-help"></i></el-button>
-		<el-button type="primary" plain @click="refresh"><i :class="dataLoading ? 'el-icon-loading' : 'el-icon-refresh'"></i></el-button>
+		<el-button type="primary" :plain="!dataLoading" @click="refresh"><i :class="dataLoading ? 'el-icon-loading' : 'el-icon-refresh'"></i></el-button>
 		<el-select v-model="autoRefreshTime" style="width: 100px; margin-left: 10px;" value-key="value">
 			<el-option v-for="item in AutoRefreshTimeList" :key="item.value" :value="item.value" :label="item.label"/>
 		</el-select>
@@ -28,6 +29,10 @@ export default Vue.extend({
 		filterText: {
 			get(): string { return this.$store.state.filterText; },
 			set(value: string) { this.$store.commit("setFilterText", value); },
+		},
+		apiAddress: {
+			get(): string { return this.$store.state.apiAddress; },
+			set(value: string) { this.$store.commit("setApiAddress", value); },
 		},
 		filterOnlyActive: {
 			get(): boolean { return this.$store.state.filterOnlyActive; },

@@ -39,7 +39,7 @@
 	<header-panel @refresh = "reloadApplicationPoolData">
 
 	</header-panel>
-	<div class="sites-list-cnt">
+	<div class="sites-list-cnt" :is-loading="dataLoading">
 		<web-app-cnt v-for="app in applications" :key="app.id" :app="app" v-show="isVisible(app)" />
 	</div>
 </div></template>
@@ -57,6 +57,7 @@ const locale = require("element-ui/lib/locale/lang/ua.js");
 import "element-ui/lib/theme-chalk/index.css";
 
 import { WebAppApi, WebApp, ApplicationPoolData, ApplicationPoolApi } from "../../api-client/index";
+import { GetAPI } from "@/store";
 Vue.use(ElementUI, { locale });
 
 @Component({
@@ -115,7 +116,7 @@ export default class App extends Vue {
 
 	protected async loadPoolsData() {
 		this.$store.commit("setDataLoading", true);
-		this.$store.commit("setPools", await new ApplicationPoolApi().getApplicationPools());
+		this.$store.commit("setPools", await GetAPI(ApplicationPoolApi).getApplicationPools());
 		this.$store.commit("setDataLoading", false);
 	}
 
@@ -145,7 +146,7 @@ export default class App extends Vue {
 	}
 
 	protected isVisible(app: WebApp) {
-		return (!this.filterText || app.path.includes(this.filterText))
+		return (!this.filterText || app.path.toLowerCase().includes(this.filterText.toLowerCase()))
 			&& (!this.filterOnlyActive || this.getApplicationIsActive(app));
 	}
 }
@@ -169,6 +170,17 @@ body, html {
 	height: calc(100vh - 40px);
 	overflow: auto;
 }
+
+.sites-list-cnt[is-loading] {
+	animation: loading_background_color_an 1.5s cubic-bezier(1, 1, 0, 0.01) 1s infinite;
+}
+
+@keyframes loading_background_color_an {
+	0%  {background-color: #ecf5ff; }
+	50%  {background-color: #b3d8ff; }
+	100%  {background-color: #ecf5ff; }
+}
+
 
 #app {}
 
