@@ -26,6 +26,8 @@ namespace WebAppManager.Model {
 		[Required]
 		public string ApplicationPoolName { get; set; }
 
+		public string SQLDBType { get; set; }
+
 		/// <summary> Рядок підключення до БД </summary>
 		public string DBConnectionString { get; set; }
 

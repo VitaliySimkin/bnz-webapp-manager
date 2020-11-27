@@ -1,108 +1,82 @@
 <template><div  class="web-app-cnt">
-<div class="app-control-panel">
-	<div class="app-info-cnt">
-		<a :href="app.path" style="text-decoration: initial;"><span class="app-caption">{{app.path}}</span></a>
-	</div>
-	<div class="actions-cnt">
-
-		<el-tooltip v-if="applicationPoolInfo" class="item" effect="light" placement="left"
-			:disabled="!applicationPoolInfo.existProcesses">
-			<div slot="content"><span class="application-processes-description" v-html="applicationPoolInfo.processesDescription"></span></div>
-			<el-tag style="margin-right: 8px;" :type="applicationPoolInfo.type"
-				disable-transitions :effect="applicationPoolInfo.effect">{{applicationPoolInfo.state}}</el-tag>
-		</el-tooltip>
-
-		<el-button type="info" size="small" :plain="displayMode != DisplayMode.SQL"
-				@click="setDisplayMode(DisplayMode.SQL)">SQL</el-button>
-
-		<el-button type="info" size="small"  style="margin-left:10px" :plain="displayMode != DisplayMode.REDIS"
-				@click="setDisplayMode(DisplayMode.REDIS)">REDIS</el-button>
-
-		<el-button type="info" size="small" style="margin-left:10px" :plain="displayMode != DisplayMode.DETAILS"
-			@click="setDisplayMode(DisplayMode.DETAILS)"><i class="el-icon-tickets" /></el-button>
-
-		<el-dropdown style="margin-left:10px" @command="handleCommand($event)">
-			<el-button type="danger" plain size="small"><i class="el-icon-more-outline"></i></el-button>
-			<el-dropdown-menu slot="dropdown">
-				<el-dropdown-item v-for="command in Commands" :key="command.code" :command="command.code"
-					><i :class="command.icon"></i>{{command.caption}}</el-dropdown-item>
-			</el-dropdown-menu>
-		</el-dropdown>
-
-	</div>
-
-</div>
-
-<div class="app-wrap-cnt" v-if="displayMode == DisplayMode.DETAILS">
-	<el-table :data="webAppDetails" :show-header="false">
-		<el-table-column prop="property" class-name="app-property-name" width="175px"></el-table-column>
-		<el-table-column prop="value" class-name="app-property-value"></el-table-column>
-	</el-table>
-</div>
-
-<div class="app-wrap-cnt" v-if="displayMode == DisplayMode.SQL">
-	<div class="site-console-panel">
-		<el-button type="primary" size="small" @click="executeSQL" :loading="sqlExecuting">Execute</el-button>
-		<div class="right-cnt">
-			<span v-if="sqlResult" style="font-family: monospace;font-size: 15px;color: #555;
-				padding-right: 10px;">{{sqlExecutionState}}</span>
+	<div class="app-control-panel">
+		<div class="app-info-cnt">
+			<a :href="app.path" style="text-decoration: initial;"><span class="app-caption">{{app.path}}</span></a>
 		</div>
-	</div>
-	<div class="site-console-content">
-		<codemirror v-model="sqlCode" :options="sqlOptions" style="margin: 5px 0;"></codemirror>
-		<div v-if="sqlResult" >
-			<el-table v-if="sqlResult.success" :data="sqlResult.rows" size="small" max-height="300" border>
-				<el-table-column show-overflow-tooltip v-for="(column, columnIndex) in sqlResult.columns"
-					:label="column" :key=(columnIndex) :prop="String(columnIndex)"></el-table-column>
-			</el-table>
-			<div v-else class="sql-error-cnt">
-				<span class="sql-error-message">{{sqlResult.errorMessage}}</span>
-				<span class="sql-error-stack">{{sqlResult.errorStack}}</span>
-			</div>
-		</div>
-	</div>
-</div>
+		<div class="actions-cnt">
 
-<div class="app-wrap-cnt" v-if="displayMode == DisplayMode.REDIS">
-	<div class="site-console-panel">
-		<div>
-			<el-button type="primary" size="small" @click="getRedisAll">Get all values</el-button>
-			
-			
+			<el-tooltip v-if="applicationPoolInfo" class="item" effect="light" placement="left"
+				:disabled="!applicationPoolInfo.existProcesses">
+				<div slot="content"><span class="application-processes-description" v-html="applicationPoolInfo.processesDescription"></span></div>
+				<el-tag style="margin-right: 8px;" :type="applicationPoolInfo.type"
+					disable-transitions :effect="applicationPoolInfo.effect">{{applicationPoolInfo.state}}</el-tag>
+			</el-tooltip>
+
+			<el-button type="info" size="small" :plain="displayMode != DisplayMode.SQL"
+					@click="setDisplayMode(DisplayMode.SQL)">SQL</el-button>
+
+			<el-button type="info" size="small"  style="margin-left:10px" :plain="displayMode != DisplayMode.REDIS"
+					@click="setDisplayMode(DisplayMode.REDIS)">REDIS</el-button>
+
+			<el-button type="info" size="small" style="margin-left:10px" :plain="displayMode != DisplayMode.DETAILS"
+				@click="setDisplayMode(DisplayMode.DETAILS)"><i class="el-icon-tickets" /></el-button>
+
+			<el-dropdown style="margin-left:10px" @command="handleCommand($event)">
+				<el-button type="danger" plain size="small"><i class="el-icon-more-outline"></i></el-button>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item v-for="command in Commands" :key="command.code" :command="command.code"
+						><i :class="command.icon"></i>{{command.caption}}</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+
 		</div>
+
 	</div>
-	<div  class="site-console-content"  style="margin-top: 5px;">
-		<el-row :gutter="20">
-			<el-col :span="8"><el-input v-model="redisKey" size="small" placeholder="key"></el-input></el-col>
-			<el-col :span="4"><el-button type="primary" size="small" @click="getRedisValue">Get</el-button></el-col>
-			<el-col :span="8"><el-input v-model="redisValue" size="small" placeholder="value"></el-input></el-col>
-			<el-col :span="4"><el-button type="primary" size="small" @click="setRedisValue" :disabled="!redisKey">Set</el-button></el-col>
-		</el-row>
-		<el-table v-if="redisValues.length > 0"  style="margin-top: 5px;" :data="redisValues" size="small" max-height="300" border
-				@row-click="onRedisValuesTableClick">
-			<el-table-column show-overflow-tooltip label="Key" prop="Key"></el-table-column>
-			<el-table-column show-overflow-tooltip label="Value" prop="Value"></el-table-column>
+
+	<div class="app-wrap-cnt" v-if="displayMode == DisplayMode.DETAILS">
+		<el-table :data="webAppDetails" :show-header="false">
+			<el-table-column prop="property" class-name="app-property-name" width="175px"></el-table-column>
+			<el-table-column prop="value" class-name="app-property-value"></el-table-column>
 		</el-table>
 	</div>
-</div>
 
+	<web-app-sql-panel v-else-if="displayMode == DisplayMode.SQL" :app="app"></web-app-sql-panel>
+
+	<div class="app-wrap-cnt" v-if="displayMode == DisplayMode.REDIS">
+		<div class="site-console-panel">
+			<div>
+				<el-button type="primary" size="small" @click="getRedisAll">Get all values</el-button>
+				
+				
+			</div>
+		</div>
+		<div  class="site-console-content"  style="margin-top: 5px;">
+			<el-row :gutter="20">
+				<el-col :span="8"><el-input v-model="redisKey" size="small" placeholder="key"></el-input></el-col>
+				<el-col :span="4"><el-button type="primary" size="small" @click="getRedisValue">Get</el-button></el-col>
+				<el-col :span="8"><el-input v-model="redisValue" size="small" placeholder="value"></el-input></el-col>
+				<el-col :span="4"><el-button type="primary" size="small" @click="setRedisValue" :disabled="!redisKey">Set</el-button></el-col>
+			</el-row>
+			<el-table v-if="redisValues.length > 0"  style="margin-top: 5px;" :data="redisValues" size="small" max-height="300" border
+					@row-click="onRedisValuesTableClick">
+				<el-table-column show-overflow-tooltip label="Key" prop="Key"></el-table-column>
+				<el-table-column show-overflow-tooltip label="Value" prop="Value"></el-table-column>
+			</el-table>
+		</div>
+	</div>
 
 </div></template>
 
 <script lang="ts">
 import Vue from "vue";
 import store from "../store/index";
-import { WebApp, ApplicationPoolData, DBApi, SQLQueryResult,
+import { WebApp, ApplicationPoolData,
 	RedisApi, ApplicationPoolApi, StringStringKeyValuePair } from "../../../api-client/index";
 import { Component, Prop } from "vue-property-decorator";
 import { State } from "vuex-class";
 
 // tslint:disable-next-line
-const VueCodemirror = require("vue-codemirror");
-import "codemirror/lib/codemirror.css";
-import "codemirror/mode/sql/sql.js";
-import "cm-show-invisibles";
-Vue.use(VueCodemirror);
+import WebAppSqlPanel from "./web-app-sql-panel.vue";
 
 enum DisplayMode {
 	NONE = "",
@@ -149,13 +123,15 @@ const Commands: WebAppCommand[] = [ {
 },
 ];
 
-@Component
+@Component({
+	components: {
+		WebAppSqlPanel,
+	},
+})
 export default class WebAppCnt extends Vue {
 
 	@Prop({required: true})
 	public app: WebApp;
-
-	public sqlExecuting: boolean = false;
 
 	public redisKey: string = "";
 	public redisValue: string = "";
@@ -165,22 +141,7 @@ export default class WebAppCnt extends Vue {
 	protected DisplayMode = DisplayMode;
 
 
-	protected sqlCode: string = "SELECT 1;";
-
-
-	protected sqlResult: SQLQueryResult | null = null;
-
 	protected redisValues: StringStringKeyValuePair[] = [];
-
-	protected sqlOptions: object = {
-		tabSize: 4,
-		mode: "text/x-mssql",
-		lineNumbers: true,
-		indentWithTabs: true,
-		showInvisibles: true,
-		line: true,
-		viewportMargin: Infinity,
-	};
 
 	private displayMode: DisplayMode = DisplayMode.NONE;
 
@@ -228,6 +189,12 @@ export default class WebAppCnt extends Vue {
 
 	protected setDisplayMode(mode: DisplayMode): void {
 		this.displayMode = this.displayMode === mode ? DisplayMode.NONE : mode;
+		localStorage.setItem(`${this.app.id}_displayMode`, this.displayMode);
+	}
+
+	protected mounted() {
+		const value = localStorage.getItem(`${this.app.id}_displayMode`);
+		this.setDisplayMode(value ? value as DisplayMode : DisplayMode.NONE);
 	}
 
 	protected get applicationPool() {
@@ -286,23 +253,6 @@ export default class WebAppCnt extends Vue {
 		];
 	}
 
-	protected async executeSQL() {
-		this.sqlExecuting = true;
-		this.sqlResult = null;
-		this.sqlResult = await new DBApi().execute(this.app.id, { sql: this.sqlCode });
-		this.sqlExecuting = false;
-	}
-
-	protected get sqlExecutionState() {
-		if (this.sqlExecuting) {
-			return "running...";
-		} else if (this.sqlResult) {
-			return `Time: ${this.sqlResult!.executeTime} ms`;
-		} else {
-			return "";
-		}
-	}
-
 }
 
 </script>
@@ -319,33 +269,6 @@ export default class WebAppCnt extends Vue {
 .right-cnt {
 }
 
-div.sql-error-cnt {
-    padding: 5px 10px;
-    border: solid 1px #aaa;
-}
-span.sql-error-message {
-    font-family: monospace;
-    font-size: 17px;
-    display: block;
-    color: #ff0000;
-    font-weight: bold;
-}
-span.sql-error-stack {
-    font-family: monospace;
-    white-space: break-spaces;
-    display: block;
-    color: #c30000;
-}
-
-      .CodeMirror {
-        border: 1px solid #eee;
-        height: auto;
-      }
-      .cm-tab {
-         background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAMCAYAAAAkuj5RAAAAAXNSR0IArs4c6QAAAGFJREFUSMft1LsRQFAQheHPowAKoACx3IgEKtaEHujDjORSgWTH/ZOdnZOcM/sgk/kFFWY0qV8foQwS4MKBCS3qR6ixBJvElOobYAtivseIE120FaowJPN75GMu8j/LfMwNjh4HUpwg4LUAAAAASUVORK5CYII=);
-         background-position: right;
-         background-repeat: no-repeat;
-      }
 .application-processes-description {
 	font-family: monospace;
 }

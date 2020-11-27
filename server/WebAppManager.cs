@@ -75,8 +75,24 @@ namespace WebAppManager {
 		/// <summary> Отримати перелік застосунків розгорнутих на сайті </summary>
 		/// <param name="site">сайт</param>
 		/// <returns>застосунки на сайті</returns>
-		protected List<WebApp> GetSiteWebApps(Site site) {
-			return site.Applications.Select(application => ConvertToWebApp(application, site)).ToList();
+		protected IEnumerable<WebApp> GetSiteWebApps(Site site) {
+			return site.Applications.Select(application => ConvertToWebApp(application, site));
+		}
+
+		/// <summary> Отримати тип БД </summary>
+		/// <param name="connectionString">рядок підключення до БД</param>
+		/// <returns>тип БД</returns>
+		public virtual SQLDBType GetDBConnectionType(string connectionString) {
+			if (string.IsNullOrEmpty(connectionString)) {
+				return SQLDBType.Unknown;
+			}
+			if(connectionString.Contains("(SERVICE_NAME")) {
+				return SQLDBType.Oracle;
+			} else if(connectionString.ToUpper().Contains("INITIAL CATALOG")) {
+				return SQLDBType.MSSQL;
+			} else {
+				return SQLDBType.PostgreSQL;
+			}
 		}
 
 		/// <summary> Конвертувати дані про застосунок </summary>
@@ -91,6 +107,7 @@ namespace WebAppManager {
 				Site = site.Name
 			};
 			LoadConnectionStringsInfo(ref webApp);
+			webApp.SQLDBType = GetDBConnectionType(webApp.DBConnectionString).ToString();
 			webApp.Id = GetWebAppHash(webApp);
 			return webApp;
 		}

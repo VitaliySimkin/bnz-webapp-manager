@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -44,7 +45,6 @@ namespace WebAppManager {
 					   .AllowAnyMethod()
 					   .AllowAnyHeader();
 			}));
-
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,16 +57,11 @@ namespace WebAppManager {
 				c.SwaggerEndpoint("v1/swagger.json", "My API V1");
 
 			});
-
 			app.UseRouting();
-
 			app.UseAuthorization();
-
 			app.UseEndpoints(endpoints => {
 				endpoints.MapControllers();
 			});
-
-
 		}
 	}
 }

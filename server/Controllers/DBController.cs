@@ -34,9 +34,13 @@ namespace WebAppManager.Controllers {
 			switch (GetDBConnectionType(connectionString)) {
 				case SQLDBType.MSSQL:
 					connectionString = connectionString.Replace("; Async = true", "");
-					return new SqlConnection(connectionString);
+					var connection = new SqlConnection(connectionString);
+					//connection.InfoMessage()
+					return connection;
 				case SQLDBType.Oracle:
 					return new OracleConnection(connectionString);
+				case SQLDBType.PostgreSQL:
+					return new Npgsql.NpgsqlConnection(connectionString);
 				default:
 					throw new Exception("Unknown db type");
 			}
@@ -45,11 +49,13 @@ namespace WebAppManager.Controllers {
 		/// <summary> Отримати тип БД </summary>
 		/// <param name="connectionString">рядок підключення до БД</param>
 		/// <returns>тип БД</returns>
-		protected static SQLDBType GetDBConnectionType(string connectionString) {
+		public static SQLDBType GetDBConnectionType(string connectionString) {
 			if (connectionString.Contains("(SERVICE_NAME")) {
 				return SQLDBType.Oracle;
-			} else {
+			} else if (connectionString.ToUpper().Contains("INITIAL CATALOG")) {
 				return SQLDBType.MSSQL;
+			} else {
+				return SQLDBType.PostgreSQL;
 			}
 		}
 
@@ -79,6 +85,7 @@ namespace WebAppManager.Controllers {
 		protected static void ReadToResult(IDataReader reader, ref SQLQueryResult result) {
 			DataTable dataTable = new DataTable();
 			dataTable.Load(reader);
+
 			result.Columns = dataTable.Columns.Cast<DataColumn>().Select(column => column.ColumnName).ToList();
 			result.Rows = dataTable.Rows.Cast<DataRow>().Select(ConvertDataRowToList).ToList();
 			result.RecordsAffected = reader.RecordsAffected;

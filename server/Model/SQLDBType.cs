@@ -9,7 +9,11 @@ namespace WebAppManager.Model {
 
 		Oracle,
 
-		MSSQL
+		MSSQL,
+
+		PostgreSQL,
+
+		Unknown
 
 	}
 

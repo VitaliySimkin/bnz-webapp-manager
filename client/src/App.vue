@@ -57,7 +57,6 @@ const locale = require("element-ui/lib/locale/lang/ua.js");
 import "element-ui/lib/theme-chalk/index.css";
 
 import { WebAppApi, WebApp, ApplicationPoolData, ApplicationPoolApi } from "../../api-client/index";
-import { GetAPI } from "@/store";
 Vue.use(ElementUI, { locale });
 
 @Component({
@@ -116,7 +115,7 @@ export default class App extends Vue {
 
 	protected async loadPoolsData() {
 		this.$store.commit("setDataLoading", true);
-		this.$store.commit("setPools", await GetAPI(ApplicationPoolApi).getApplicationPools());
+		this.$store.commit("setPools", await new ApplicationPoolApi().getApplicationPools());
 		this.$store.commit("setDataLoading", false);
 	}
 

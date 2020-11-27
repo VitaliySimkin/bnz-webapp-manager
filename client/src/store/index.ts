@@ -62,9 +62,9 @@ const STORE = new Vuex.Store({
 
 
 (async function loadConfig() {
-	const data = await fetch("../config.json");
-	const config = await data.json();
-	STORE.commit("setConfig", config);
+	// const data = await fetch("../config.json");
+	// const config = await data.json();
+	// STORE.commit("setConfig", config);
 })();
 
 export default STORE;
