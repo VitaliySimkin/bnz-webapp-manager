@@ -11,6 +11,54 @@ const templates = [
 			[DBType.Oracle]: `SELECT
 					"ss"."Code"
 					,"ss"."Name"
+					,"ss"."ValueTypeName"
+					,"ssv"."TextValue"
+					,"ssv"."IntegerValue"
+					,"ssv"."FloatValue"
+					,"ssv"."BooleanValue"
+					,"ssv"."DateTimeValue"
+					,"ssv"."GuidValue"
+					,"ssv"."BinaryValue"
+				FROM "SysSettings" "ss"
+				INNER JOIN "SysSettingsValue" "ssv" ON "ssv"."SysSettingsId" = "ss"."Id"
+				WHERE "ss"."Code" LIKE '%%'`.replaceAll("\n				", "\n"),
+			[DBType.MSSQL]: `SELECT
+					[ss].[Code]
+					,[ss].[Name]
+					,[ss].[ValueTypeName]
+					,[ssv].[TextValue]
+					,[ssv].[IntegerValue]
+					,[ssv].[FloatValue]
+					,[ssv].[BooleanValue]
+					,[ssv].[DateTimeValue]
+					,[ssv].[GuidValue]
+					,[ssv].[BinaryValue]
+				FROM [dbo].[SysSettings] [ss] WITH(NOLOCK)
+				INNER JOIN [dbo].[SysSettingsValue] [ssv] WITH(NOLOCK) ON [ssv].[SysSettingsId] = [ss].[Id]
+				WHERE [ss].[Code] LIKE '%%';`.replaceAll("\n				", "\n"),
+			[DBType.PostgreSQL]: `SELECT
+					"ss"."Code"
+					,"ss"."Name"
+					,"ss"."ValueTypeName"
+					,"ssv"."TextValue"
+					,"ssv"."IntegerValue"
+					,"ssv"."FloatValue"
+					,"ssv"."BooleanValue"
+					,"ssv"."DateTimeValue"
+					,"ssv"."GuidValue"
+					,"ssv"."BinaryValue"
+				FROM "SysSettings" "ss"
+				INNER JOIN "SysSettingsValue" "ssv" ON "ssv"."SysSettingsId" = "ss"."Id"
+				WHERE "ss"."Code" LIKE '%%';`.replaceAll("\n				", "\n"),
+		},
+	},
+	{
+		caption: "SELECT SysSettings (more info)",
+		sql: {
+			[DBType.Oracle]: `SELECT
+					"ss"."Code"
+					,"ss"."Name"
+					,"ss"."ValueTypeName"
 					,"schema"."Name" AS "LookupName"
 					,"ssv"."TextValue"
 					,"ssv"."IntegerValue"
@@ -30,6 +78,7 @@ const templates = [
 			[DBType.MSSQL]: `SELECT
 					[ss].[Code]
 					,[ss].[Name]
+					,[ss].[ValueTypeName]
 					,[schema].[Name] AS [LookupName]
 					,[ssv].[TextValue]
 					,[ssv].[IntegerValue]
@@ -49,6 +98,7 @@ const templates = [
 			[DBType.PostgreSQL]: `SELECT
 					"ss"."Code"
 					,"ss"."Name"
+					,"ss"."ValueTypeName"
 					,"schema"."Name" AS "LookupName"
 					,"ssv"."TextValue"
 					,"ssv"."IntegerValue"
