@@ -2,7 +2,7 @@
 <div class="app-wrap-cnt" style="padding: 0" :fullscreen="isFullScreen">
 	<div class="site-console-panel web-app-sql-main-panel">
 		<span class="sql-db-type"><a v-show="isFullScreen" :href="app.path">{{app.path}}</a>{{ isFullScreen ? " " : "" }}{{app.sqldbType}}</span>
-		<el-button size="small" class="add-tab-button" @click="addQuery" icon="el-icon-plus"></el-button>
+		<el-button size="mini" class="add-tab-button" @click="addQuery" icon="el-icon-plus"></el-button>
 		<div class="tab-panel">
 			<div v-for="queryItem in queries" :key="queryItem.key" class="tab-header-item"
 				@click="activeQueryKey = queryItem.key"
@@ -11,7 +11,8 @@
 				<span class="tab-header-item-action el-icon-close" @click="removeQuery(queryItem.key)"></span>
 			</div>
 		</div>
-		<el-button size="small" @click="isFullScreen = !isFullScreen" icon="el-icon-full-screen"></el-button>
+		<el-button size="mini" @click="onExitClick" icon="el-icon-top-left"></el-button>
+		<el-button size="mini" @click="isFullScreen = !isFullScreen" icon="el-icon-full-screen"></el-button>
 	</div>
 	<div class="site-console-content">
 		<sql-query-panel v-if="activeQuery" :app="app" :query="activeQuery" @onQuerySQLChange="onQuerySQLChange"></sql-query-panel>
@@ -55,6 +56,10 @@ export default class WebAppSqlPanel extends Vue {
 	public removeQuery(key: string) {
 		const index = this.queries.findIndex((item) => item.key === key);
 		this.queries.splice(index, 1);
+		setTimeout(() => {
+			const nextItemIndex = (index === this.queries.length) ? (index - 1) : index;
+			this.activeQueryKey = (this.queries[nextItemIndex] || {}).key;
+		}, 0);
 		this.saveDataToCache();
 	}
 
@@ -131,6 +136,10 @@ export default class WebAppSqlPanel extends Vue {
 	@Watch("isFullScreen")
 	protected onChange_isFullScreen() {
 		this.saveDataToCache();
+	}
+
+	protected onExitClick() {
+		this.$emit("closeSQLPanel");
 	}
 
 }

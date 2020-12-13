@@ -40,7 +40,8 @@
 		</el-table>
 	</div>
 
-	<web-app-sql-panel v-else-if="displayMode == DisplayMode.SQL" :app="app"></web-app-sql-panel>
+	<web-app-sql-panel v-else-if="displayMode == DisplayMode.SQL" :app="app"
+		@closeSQLPanel="setDisplayMode(DisplayMode.NONE)"></web-app-sql-panel>
 
 	<div class="app-wrap-cnt" v-if="displayMode == DisplayMode.REDIS">
 		<div class="site-console-panel">

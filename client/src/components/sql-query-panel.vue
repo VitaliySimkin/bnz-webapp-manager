@@ -1,7 +1,18 @@
 <template>
 <div v-on:keyup.enter="onEnterKeyup">
 	<div class="site-console-panel" style="padding: 6px 6px 0 6px;">
-		<el-button type="primary" size="small" @click="executeSQL" :loading="sqlExecuting">Execute</el-button>
+		<div class="left-console-panel">
+			<el-button type="primary" size="small" @click="executeSQL" :loading="sqlExecuting" :disabled="!sql">Execute</el-button>
+			<el-dropdown @command="applyTemplate">
+				<el-button type="primary" size="small">
+					Шаблони<i class="el-icon-arrow-down el-icon--right"></i>
+				</el-button>
+				<el-dropdown-menu slot="dropdown">
+					<el-dropdown-item v-for="(item, index) in templates" :key="index" :command="item"
+						>{{item.caption}}</el-dropdown-item>
+				</el-dropdown-menu>
+			</el-dropdown>
+		</div>
 		<div class="right-cnt">
 			<el-button v-if="result" icon="el-icon-download" size="small" @click="loadCSV">.csv</el-button>
 			<span v-if="result" style="font-family: monospace;font-size: 15px;color: #555;
@@ -33,6 +44,8 @@ import { WebApp, ApplicationPoolData, DBApi, SQLQueryResult,
 import { Component, Prop, Model, Watch } from "vue-property-decorator";
 import { State } from "vuex-class";
 
+import QueryTemplateManager from "./QueryTemplateManager";
+
 // tslint:disable-next-line
 const VueCodemirror = require("vue-codemirror");
 import "codemirror/lib/codemirror.css";
@@ -61,6 +74,10 @@ export default class SqlQueryPanel extends Vue {
 		this.query.result = value;
 	}
 
+	public get templates() {
+		return QueryTemplateManager.getTemplatesFor(this.app.sqldbType);
+	}
+
 	public sqlExecuting: boolean = false;
 
 	protected sqlOptions: object = {
@@ -72,6 +89,10 @@ export default class SqlQueryPanel extends Vue {
 		line: true,
 		viewportMargin: Infinity,
 	};
+
+	public applyTemplate(item: {sql: string}) {
+		this.sql = item.sql;
+	}
 
 
 	@Watch("sql")
@@ -139,7 +160,6 @@ export default class SqlQueryPanel extends Vue {
 <style lang="less">
 
 .site-console-panel {
-	
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -293,6 +313,10 @@ body {
 
 .right-cnt > * {
     margin-left: 12px;
+}
+
+.left-console-panel > *:not(:last-child) {
+	margin-right: 5px;
 }
 
 </style>
