@@ -21,7 +21,7 @@
 		</div>
 	</div>
 	<div class="site-console-content">
-		<codemirror v-model="sql" :options="sqlOptions" style="margin: 5px 0px;max-height: 500px;overflow: auto;border-top: solid 1px #ccc;border-bottom: solid 1px #ccc;"></codemirror>
+		<codemirror v-model="sql" :options="sqlOptions" style="margin: 5px 0px;max-height: 40vh;overflow: auto;border-top: solid 1px #ccc;border-bottom: solid 1px #ccc;"></codemirror>
 		<div v-if="result" style="padding:5px" >
 			<el-table v-if="result.success" :data="result.rows" size="small" max-height="600" border>
 				<el-table-column show-overflow-tooltip v-for="(column, columnIndex) in result.columns"
