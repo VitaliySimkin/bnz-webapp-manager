@@ -3,7 +3,7 @@
 		<el-input v-model="filterText" class="filter-text-input" clearable placeholder="пошук..." style="width:30vw;"></el-input>
 		<el-button @click="filterOnlyActive = !filterOnlyActive" :type="filterOnlyActive ? 'success' : ''"
 			style="margin-left: 10px;">ACTIVE</el-button>
-		<el-input v-model="apiAddress" class="filter-text-input" style="width:30vw;"></el-input>
+		<!-- <el-input v-model="apiAddress" class="filter-text-input" style="width:30vw;"></el-input> -->
 	</div>
 	<div>
 		<el-button type="info" plain @click="HelpVisible = true"><i class="el-icon-help"></i></el-button>
@@ -63,7 +63,7 @@ export default Vue.extend({
 	position: fixed;
 	width: 100%;
 	top: 0;
-	z-index: 2000;
+	z-index: 1000;
 	height: 40px;
 	border-bottom: solid 1px #eee;
 	box-shadow: 0 0 5px 0px #aaa;

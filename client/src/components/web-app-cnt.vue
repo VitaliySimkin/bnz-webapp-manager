@@ -289,7 +289,7 @@ body {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 2000;
+    z-index: 1500;
     height: 40px;
     border-bottom: solid 1px #eee;
     box-shadow: 0 0 5px 0px #aaa;

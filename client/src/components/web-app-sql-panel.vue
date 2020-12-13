@@ -155,7 +155,7 @@ export default class WebAppSqlPanel extends Vue {
     top: 0;
     left: 0;
     background-color: #fff !important;
-    z-index: 10000000;
+    z-index: 1500;
     margin: 0 !important;
     border: none !important;
     box-sizing: border-box;

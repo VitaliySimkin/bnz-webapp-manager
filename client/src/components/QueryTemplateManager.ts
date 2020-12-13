@@ -6,7 +6,7 @@ enum DBType {
 
 const templates = [
 	{
-		caption: "SysSettings",
+		caption: "SELECT SysSettings",
 		sql: {
 			[DBType.Oracle]: `SELECT
 					"ss"."Code"

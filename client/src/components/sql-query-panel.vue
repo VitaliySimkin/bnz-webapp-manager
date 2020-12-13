@@ -4,12 +4,12 @@
 		<div class="left-console-panel">
 			<el-button type="primary" size="small" @click="executeSQL" :loading="sqlExecuting" :disabled="!sql">Execute</el-button>
 			<el-dropdown @command="applyTemplate">
-				<el-button type="primary" size="small">
+				<el-button size="small">
 					Шаблони<i class="el-icon-arrow-down el-icon--right"></i>
 				</el-button>
 				<el-dropdown-menu slot="dropdown">
 					<el-dropdown-item v-for="(item, index) in templates" :key="index" :command="item"
-						>{{item.caption}}</el-dropdown-item>
+						class="template-menu-item">{{item.caption}}</el-dropdown-item>
 				</el-dropdown-menu>
 			</el-dropdown>
 		</div>
@@ -211,7 +211,7 @@ body {
     position: fixed;
     width: 100%;
     top: 0;
-    z-index: 2000;
+    z-index: 1500;
     height: 40px;
     border-bottom: solid 1px #eee;
     box-shadow: 0 0 5px 0px #aaa;
@@ -317,6 +317,13 @@ body {
 
 .left-console-panel > *:not(:last-child) {
 	margin-right: 5px;
+}
+
+.template-menu-item {
+	font-family: monospace;
+}
+.site-console-content .el-table th {
+	user-select: initial;
 }
 
 </style>
