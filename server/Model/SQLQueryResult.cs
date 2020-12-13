@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,6 +27,8 @@ namespace WebAppManager.Model {
 
 		/// <summary> Колонки </summary>
 		public List<string> Columns { get; set; }
+
+		public List<(DateTime Date, string Message)> Messages { get; set; }
 
 		/// <summary> Рядки з даними </summary>
 		public List<List<string>> Rows { get; set; }

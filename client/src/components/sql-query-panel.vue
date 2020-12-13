@@ -3,12 +3,14 @@
 	<div class="site-console-panel" style="padding: 6px 6px 0 6px;">
 		<el-button type="primary" size="small" @click="executeSQL" :loading="sqlExecuting">Execute</el-button>
 		<div class="right-cnt">
+			<el-button v-if="result" icon="el-icon-download" size="small" @click="loadCSV">.csv</el-button>
 			<span v-if="result" style="font-family: monospace;font-size: 15px;color: #555;
 				padding-right: 10px;">{{sqlExecutionState}}</span>
+			
 		</div>
 	</div>
 	<div class="site-console-content">
-		<codemirror v-model="query" :options="sqlOptions" style="margin: 5px 0;"></codemirror>
+		<codemirror v-model="sql" :options="sqlOptions" style="margin: 5px 0px;max-height: 500px;overflow: auto;border-top: solid 1px #ccc;border-bottom: solid 1px #ccc;"></codemirror>
 		<div v-if="result" style="padding:5px" >
 			<el-table v-if="result.success" :data="result.rows" size="small" max-height="600" border>
 				<el-table-column show-overflow-tooltip v-for="(column, columnIndex) in result.columns"
@@ -36,6 +38,7 @@ const VueCodemirror = require("vue-codemirror");
 import "codemirror/lib/codemirror.css";
 import "codemirror/mode/sql/sql.js";
 import "cm-show-invisibles";
+import SQLQuery from "@/components/SQLQuery";
 Vue.use(VueCodemirror);
 
 
@@ -45,12 +48,18 @@ export default class SqlQueryPanel extends Vue {
 	@Prop({required: true})
 	public app: WebApp;
 
-	@Model("input", {required: true})
-	public sqlQuery: string;
+	@Prop({required: true})
+	public query: SQLQuery;
 
-	public query: string = "";
+	public sql: string = "";
 
-	public result: SQLQueryResult | null = null;
+	public get result(): SQLQueryResult | null {
+		return this.query.result;
+	}
+
+	public set result(value) {
+		this.query.result = value;
+	}
 
 	public sqlExecuting: boolean = false;
 
@@ -65,15 +74,16 @@ export default class SqlQueryPanel extends Vue {
 	};
 
 
-	@Watch("query")
+	@Watch("sql")
 	public handleInput() {
-		this.$emit("input", this.query);
+		this.query.sql = this.sql;
+		this.$emit("onQuerySQLChange");
 	}
 
-	@Watch("sqlQuery")
+	@Watch("query")
 	public onChange_sqlQuery() {
-		if (this.query !== this.sqlQuery) {
-			this.query = this.sqlQuery;
+		if (this.sql !== this.query.sql) {
+			this.sql = this.query.sql;
 		}
 	}
 
@@ -92,7 +102,7 @@ export default class SqlQueryPanel extends Vue {
 	protected async executeSQL() {
 		this.sqlExecuting = true;
 		this.result = null;
-		this.result = await new DBApi().execute(this.app.id, { sql: this.query });
+		this.result = await new DBApi().execute(this.app.id, { sql: this.sql });
 		this.sqlExecuting = false;
 	}
 
@@ -104,6 +114,22 @@ export default class SqlQueryPanel extends Vue {
 		} else {
 			return "";
 		}
+	}
+
+	protected loadCSV() {
+		const columns = this.result!.columns || [];
+		const data = this.result!.rows || [];
+		const csvContent = "data:text/csv;charset=utf-8," +
+			[columns].concat(data).map((item) => item.join(",")).join("\n");
+		const encodedUri = encodeURI(csvContent);
+		const link = document.createElement("a");
+		link.setAttribute("href", encodedUri);
+		const siteName = this.app.path.replace(new RegExp("[^a-z0-9]", "gi"), "");
+		const fileName = `${siteName}_sqlresult.csv`;
+		link.setAttribute("download", fileName);
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
 	}
 
 }
@@ -249,8 +275,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 10px!important;
-    height: 10px!important
+    width: 10px;
+    height: 10px
 }
 
 ::-webkit-scrollbar-track {
@@ -263,6 +289,10 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #888!important
+}
+
+.right-cnt > * {
+    margin-left: 12px;
 }
 
 </style>

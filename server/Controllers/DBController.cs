@@ -59,17 +59,35 @@ namespace WebAppManager.Controllers {
 			}
 		}
 
+		protected static void OnMessage(SQLQueryResult result, string message) {
+			result.Messages.Add((DateTime.Now, message));
+		}
+
 		/// <summary> Виконати SQL </summary>
 		/// <param name="dbConnection">підключення до БД</param>
 		/// <param name="sql">запит</param>
 		/// <returns>результат виконання</returns>
 		protected static SQLQueryResult ExecuteSQL(IDbConnection dbConnection, string sql) {
-			var result = new SQLQueryResult { Sql = sql };
+			var result = new SQLQueryResult { Sql = sql, Messages = new List<(DateTime Date, string Message)>() };
 			dbConnection.Open();
 
 			var watch = new System.Diagnostics.Stopwatch();
 			watch.Start();
 			using (IDbCommand sqlCommand = dbConnection.CreateCommand()) {
+
+				if (dbConnection is SqlConnection) {
+					((SqlConnection)dbConnection).FireInfoMessageEventOnUserErrors = true;
+					((SqlConnection)dbConnection).InfoMessage += (sender, e) => OnMessage(result, e.Message);
+				}
+				if (dbConnection is OracleConnection) {
+					((OracleConnection)dbConnection).StateChange += (sender, e) => OnMessage(result, e.ToString());
+					((OracleConnection)dbConnection).InfoMessage += (sender, e) => OnMessage(result, e.Message);
+				}
+				if (sqlCommand is Npgsql.NpgsqlCommand) {
+					((Npgsql.NpgsqlConnection)dbConnection).Notice += (sender, e) => OnMessage(result, e.Notice.MessageText);
+					((Npgsql.NpgsqlConnection)dbConnection).Notification += (sender, e) => OnMessage(result, (string)sender);
+				}
+
 				sqlCommand.CommandText = sql;
 				ReadToResult(sqlCommand.ExecuteReader(), ref result);
 			}
@@ -115,6 +133,25 @@ namespace WebAppManager.Controllers {
 				return new SQLQueryResult {
 					Success = false,
 					Sql = config.Sql,
+					ErrorMessage = ex.Message,
+					ErrorStack = ex.StackTrace
+				};
+			}
+		}
+		/// <summary> Виконати запит SQL до бази застосунку </summary>
+		/// <param name="webAppId">id застосунку</param>
+		/// <param name="config">параметри виконання</param>
+		/// <returns>результат</returns>
+		[HttpPost("/test", Name = nameof(ExecuteSQL))]
+		public SQLQueryResult ExecuteSQL() {
+			string connectionStr = "Data Source=(DESCRIPTION = (ADDRESS_LIST = (ADDRESS = (PROTOCOL = TCP)(HOST = ora-sber)(PORT = 1521))) (CONNECT_DATA = (SERVICE_NAME = sberbank715_simkin) (SERVER = DEDICATED)));User Id=bpmonline;Password=bpmonline";
+			string Sql = @"SELECT * FROM ""Contact""";
+			try {
+				return ExecuteSQL(connectionStr, Sql);
+			} catch (Exception ex) {
+				return new SQLQueryResult {
+					Success = false,
+					Sql = Sql,
 					ErrorMessage = ex.Message,
 					ErrorStack = ex.StackTrace
 				};

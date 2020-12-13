@@ -62,6 +62,11 @@ namespace WebAppManager {
 			app.UseEndpoints(endpoints => {
 				endpoints.MapControllers();
 			});
+			var webSocketOptions = new WebSocketOptions() {
+				KeepAliveInterval = TimeSpan.FromMinutes(10)
+			};
+
+			app.UseWebSockets(webSocketOptions);
 		}
 	}
 }

@@ -8,23 +8,25 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "cm-show-invisibles": "^3.0.1",
-    "element-ui": "^2.13.2",
-    "portable-fetch": "^3.0.0",
-    "vue": "^2.6.11",
-    "vue-codemirror": "^4.0.6",
-    "vuex": "^3.1.3"
+    "@types/dom-inputevent": "^1.0.6",
+    "cm-show-invisibles": "*",
+    "element-ui": "*",
+    "portable-fetch": "*",
+    "vue": "*",
+    "vue-class-component": "^7.2.6",
+    "vue-codemirror": "*",
+    "vuex": "*"
   },
   "devDependencies": {
-    "@vue/cli-plugin-typescript": "~4.3.0",
-    "@vue/cli-plugin-vuex": "~4.3.0",
-    "@vue/cli-service": "~4.3.0",
-    "less": "^3.0.4",
-    "less-loader": "^5.0.0",
-    "tslib": "^2.0.0",
-    "typescript": "~3.8.3",
-    "vue-property-decorator": "^8.4.2",
-    "vue-template-compiler": "^2.6.11",
-    "vuex-class": "^0.3.2"
+    "@vue/cli-plugin-typescript": "*",
+    "@vue/cli-plugin-vuex": "*",
+    "@vue/cli-service": "*",
+    "less": "*",
+    "less-loader": "*",
+    "tslib": "*",
+    "typescript": "^4.1.2",
+    "vue-property-decorator": "*",
+    "vue-template-compiler": "*",
+    "vuex-class": "*"
   }
 }

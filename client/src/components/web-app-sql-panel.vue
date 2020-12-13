@@ -1,17 +1,20 @@
 <template>
 <div class="app-wrap-cnt" style="padding: 0" :fullscreen="isFullScreen">
 	<div class="site-console-panel web-app-sql-main-panel">
-		<span class="sql-db-type">{{ isFullScreen ? app.path + " " : "" }}{{app.sqldbType}}</span>
-		<!-- <el-button size="small" @click="addQuery" icon="el-icon-plus"></el-button> -->
+		<span class="sql-db-type"><a v-show="isFullScreen" :href="app.path">{{app.path}}</a>{{ isFullScreen ? " " : "" }}{{app.sqldbType}}</span>
+		<el-button size="small" class="add-tab-button" @click="addQuery" icon="el-icon-plus"></el-button>
+		<div class="tab-panel">
+			<div v-for="queryItem in queries" :key="queryItem.key" class="tab-header-item"
+				@click="activeQueryKey = queryItem.key"
+				:active="queryItem.key === activeQueryKey">
+				<p class="caption" contenteditable @input="event => onTabCaptionChanged(event, queryItem)">{{queryItem.caption}}</p>
+				<span class="tab-header-item-action el-icon-close" @click="removeQuery(queryItem.key)"></span>
+			</div>
+		</div>
 		<el-button size="small" @click="isFullScreen = !isFullScreen" icon="el-icon-full-screen"></el-button>
 	</div>
 	<div class="site-console-content">
-		<sql-query-panel :app="app" v-model="sqlQuery"></sql-query-panel>
-		<!-- <el-tabs v-model="activeName" type="card" closable>
-			<el-tab-pane v-for="item in queries" :key="item.title" :label="item.title" :name="item.title">
-				<sql-query-panel :app="app" :query="item.sqlQuery"></sql-query-panel>
-			</el-tab-pane>
-		</el-tabs> -->
+		<sql-query-panel v-if="activeQuery" :app="app" :query="activeQuery" @onQuerySQLChange="onQuerySQLChange"></sql-query-panel>
 	</div>
 </div>
 </template>
@@ -23,6 +26,7 @@ import { Component, Prop, Watch } from "vue-property-decorator";
 import { WebApp, ApplicationPoolData, DBApi, SQLQueryResult,
 	RedisApi, ApplicationPoolApi, StringStringKeyValuePair } from "../../../api-client/index";
 import SqlQueryPanel from "./sql-query-panel.vue";
+import SQLQuery from "@/components/SQLQuery";
 
 
 @Component({
@@ -35,26 +39,31 @@ export default class WebAppSqlPanel extends Vue {
 	@Prop({required: true})
 	public app: WebApp;
 
-	public activeName: string | null = null;
-
-	public sqlQuery: string = "SELECT 1";
-
-	public queries: Array<{ title: string, sqlQuery: string }> = [];
-
 	public isFullScreen: boolean = false;
 
+	public activeQueryKey: string | null = null;
+
+	public queries: SQLQuery[] = [];
+
 	public addQuery() {
-		this.queries.push({
-			title: "Query " + +new Date(),
-			sqlQuery: "SELECT 1",
-		});
+		const query = new SQLQuery();
+		this.queries.push(query);
+		this.activeQueryKey = query.key;
+		this.saveDataToCache();
+	}
+
+	public removeQuery(key: string) {
+		const index = this.queries.findIndex((item) => item.key === key);
+		this.queries.splice(index, 1);
+		this.saveDataToCache();
 	}
 
 	public saveDataToCache() {
 		const key = `${this.app.id}_sqlDataCache`;
 		localStorage.setItem(key, JSON.stringify({
 			isFullScreen: this.isFullScreen,
-			sqlQuery: this.sqlQuery,
+			queries: this.queries,
+			activeQueryKey: this.activeQueryKey,
 		}));
 	}
 
@@ -62,24 +71,65 @@ export default class WebAppSqlPanel extends Vue {
 		const key = `${this.app.id}_sqlDataCache`;
 		try {
 			const storageItem = localStorage.getItem(key);
-			const data = JSON.parse(storageItem || "") as {sqlQuery: string, isFullScreen: boolean };
+			const data = JSON.parse(storageItem || "") as {
+				queries: Array<{key: string, sql: string, caption: string}>,
+				isFullScreen: boolean,
+				activeQueryKey: string;
+			};
 			this.isFullScreen = data.isFullScreen;
-			this.sqlQuery = data.sqlQuery;
+			this.queries = data.queries.map((item) => new SQLQuery(item));
+			this.activeQueryKey = data.activeQueryKey;
 		} catch {
-			this.activeName = "SELECT 1";
+			this.queries = [];
+			this.addQuery();
 		}
+	}
+
+	public get activeQuery() {
+		return this.queries.find((item) => item.key === this.activeQueryKey);
+	}
+
+
+	public onTabCaptionChanged(event: InputEvent, query: SQLQuery) {
+		const selection = window.getSelection();
+		const cursorPosition = selection ? selection.anchorOffset : 0;
+		let innerText = (event.srcElement as HTMLElement).innerText;
+		if (!Boolean(innerText)) {
+			innerText = "Q";
+			(event.srcElement as HTMLElement).innerText = innerText;
+		}
+		query.caption = innerText;
+		setTimeout(() => {
+			const range = document.createRange();
+			const textNode = (event.srcElement as HTMLElement).firstChild;
+			if (!textNode) {
+				return;
+			}
+			range.setStart(textNode, cursorPosition);
+			range.collapse(true);
+			const sel = window.getSelection();
+			if (sel) {
+				sel.removeAllRanges();
+				sel.addRange(range);
+			}
+		}, 0);
 	}
 
 	public created() {
 		this.loadDataFromCache();
 	}
 
-	@Watch("isFullScreen")
-	protected onChange_isFullScreen() {
+	protected onQuerySQLChange() {
 		this.saveDataToCache();
 	}
-	@Watch("sqlQuery")
-	protected onChange_sqlQuery() {
+
+	@Watch("activeQueryKey")
+	protected onChange_activeQueryKey() {
+		this.saveDataToCache();
+	}
+
+	@Watch("isFullScreen")
+	protected onChange_isFullScreen() {
 		this.saveDataToCache();
 	}
 
@@ -103,9 +153,12 @@ export default class WebAppSqlPanel extends Vue {
 	padding: 0 !important;
 	
 	.web-app-sql-main-panel {
-		padding: 5px;
-		border-bottom: solid 1px #eee;
+		border-bottom: none;
 		box-shadow: 0 0 5px 0px #aaa;
+	}
+
+	.web-app-sql-main-panel > *:not(.tab-panel) {
+		margin: 5px;
 	}
 
 }
@@ -119,8 +172,85 @@ export default class WebAppSqlPanel extends Vue {
 }
 
 .web-app-sql-main-panel {
-	padding: 5px;
     border-bottom: solid 2px #eee;
 }
 
+
+	.web-app-sql-main-panel > *:not(.tab-panel) {
+		margin: 5px;
+	}
+
+.tab-header-item {
+    user-select: none;
+    height: 100%;
+    margin-right: -1px;
+    padding: 0 12px;
+    box-sizing: border-box;
+    line-height: 36px;
+    display: inline-block;
+    list-style: none;
+    font-weight: 500;
+    color: #303133;
+    position: relative;
+    border-bottom-color: #fff;
+    border: 1px solid #e4e7ed;
+	border-bottom: none;
+	border-top: none;
+    cursor: pointer;
+}
+
+.tab-header-item:hover {
+    color: #aaf;
+}
+.tab-header-item:active {
+    color: #66f;
+}
+.tab-panel {
+	flex: 1;
+	margin: 0 10px;
+    white-space: nowrap;
+    overflow-x: auto;
+	overflow-y: hidden;
+	&::-webkit-scrollbar {
+		height: 4px;
+	}
+}
+.tab-panel > * {
+	display: inline-block;
+}
+
+.tab-header-item > .caption {
+	
+    display: inline-block;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    margin-inline-start: 0;
+	margin-inline-end: 0;
+	outline: none;
+}
+
+
+.tab-header-item > .tab-header-item-action {
+	margin-left: 4px;
+	color: #ddd;
+	&:hover {
+		background-color: #aaa;
+		border-radius: 20px;
+		color: #fff;
+	}
+}
+.tab-header-item:hover, .tab-header-item[active] {
+    background-color: #eee;
+	color: #44d;
+	border-color: #9ba0a9;
+    z-index: 1;
+	.tab-header-item-action {
+		color: #44d;
+	}
+}
+.add-tab-btn {
+	
+    margin-left: 10px;
+    cursor: pointer;
+}
 </style>

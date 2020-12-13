@@ -38,9 +38,17 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Microsoft.AspNet.WebApi.Core": {
+              "target": "Package",
+              "version": "[5.2.7, )"
+            },
             "Microsoft.Web.Administration": {
               "target": "Package",
               "version": "[11.1.0, )"
+            },
+            "Npgsql": {
+              "target": "Package",
+              "version": "[5.0.0, )"
             },
             "Oracle.ManagedDataAccess.Core": {
               "target": "Package",
@@ -85,7 +93,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

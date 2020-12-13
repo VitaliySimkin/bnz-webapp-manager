@@ -74,6 +74,12 @@
             <param name="config">параметри виконання</param>
             <returns>результат</returns>
         </member>
+        <member name="M:WebAppManager.Controllers.DBController.ExecuteSQL">
+            <summary> Виконати запит SQL до бази застосунку </summary>
+            <param name="webAppId">id застосунку</param>
+            <param name="config">параметри виконання</param>
+            <returns>результат</returns>
+        </member>
         <member name="M:WebAppManager.Controllers.RedisController.CreateRedisClient(System.String)">
             <summary> Створити клієнт Redis </summary>
             <param name="connectionString">рядок підключення</param>
@@ -230,6 +236,11 @@
             <summary> Отримати перелік застосунків розгорнутих на сайті </summary>
             <param name="site">сайт</param>
             <returns>застосунки на сайті</returns>
+        </member>
+        <member name="M:WebAppManager.WebAppManager.GetDBConnectionType(System.String)">
+            <summary> Отримати тип БД </summary>
+            <param name="connectionString">рядок підключення до БД</param>
+            <returns>тип БД</returns>
         </member>
         <member name="M:WebAppManager.WebAppManager.ConvertToWebApp(Microsoft.Web.Administration.Application,Microsoft.Web.Administration.Site)">
             <summary> Конвертувати дані про застосунок </summary>
